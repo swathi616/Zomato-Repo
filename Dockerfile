@@ -1,5 +1,5 @@
-# Use Node.js 16 slim as the base image
-FROM node:16-slim
+# Use Node the base image
+FROM node:19-alpine AS stageone
 
 # Set the working directory
 WORKDIR /app
@@ -11,6 +11,10 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application code
+COPY . .
+
+FROM stageone as final
+RUN npm install --production
 COPY . .
 
 # Build the React app
